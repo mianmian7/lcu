@@ -563,7 +563,8 @@ async function launchMacos(client, launch, base, env) {
   const host = await startOriginalHost({ client, env, controlAddress: env.LCU_MAC_CONTROL_SOCKET });
   env.LCU_MAC_LIFETIME_SOCKET = host.address;
   try {
-    return await runChild(launch, markDerived(base, env));
+    const { runChildViaCodex } = await import('./macos_codex_spawner.mjs');
+    return await runChildViaCodex(launch, markDerived(base, env), runChild);
   } finally {
     await host.stop();
   }

@@ -7,7 +7,7 @@ const { parseArgs } = process.getBuiltinModule('node:util');
 import { cacheDirectory } from './check_record.mjs';
 import { accountHome } from './fsutil.mjs';
 
-export const REPO = 'amontlabs/lcu';
+export const REPO = 'mianmian7/lcu';
 const LATEST_URL = `https://github.com/${REPO}/releases/latest`;
 const RELEASE_URL = `https://github.com/${REPO}/releases/tag/`;
 const notesUrl = (tag, version) => `https://raw.githubusercontent.com/${REPO}/${tag}/docs/releases/${version}.md`;

@@ -63,7 +63,7 @@ OWNER_AUTH = 'lcu-owner-auth'
 # lcu/ modules that ship on one platform only; every other module ships everywhere.
 PLATFORM_MODULES = {
     'linux_sky_service.mjs': 'linux', 'x11.mjs': 'linux',
-    'macos_host.mjs': 'darwin', 'macos_sky_service.mjs': 'darwin',
+    'macos_codex_spawner.mjs': 'darwin', 'macos_host.mjs': 'darwin', 'macos_sky_service.mjs': 'darwin',
     'windows_host.mjs': 'windows', 'windows_host_analyze.cjs': 'windows', 'windows_host_entry.cjs': 'windows',
     'windows_lifetime_host.cjs': 'windows', 'windows_sky_service.mjs': 'windows',
 }

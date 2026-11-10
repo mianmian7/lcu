@@ -14,9 +14,9 @@ import { createInterface } from 'node:readline/promises';
 
 import { batchCommand } from './capture.mjs';
 import { isRegular } from './fsutil.mjs';
-import { downloadTo, getText } from './update.mjs';
+import { downloadTo, getText, REPO } from './update.mjs';
 
-const DOWNLOAD = 'https://github.com/amontlabs/lcu/releases/download';
+const DOWNLOAD = `https://github.com/${REPO}/releases/download`;
 const TIMEOUT = 60;
 
 /** What tests replace. */

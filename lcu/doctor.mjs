@@ -1,6 +1,6 @@
 // `lcu doctor`: check the original desktop provider and guide first-use permissions.
 import { spawnSync } from 'node:child_process';
-import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { existsSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { basename, join } from 'node:path';
 import { parseArgs } from 'node:util';
@@ -162,7 +162,7 @@ async function macGuidance(app, retry) {
       host.openSettings(MAC_SCREEN_CAPTURE_SETTINGS, 'System Settings > Privacy & Security > Screen & System Audio Recording');
     } else if (choice === 'r') {
       try {
-        printMacStatus(retry());
+        printMacStatus(retry(), app);
       } catch (error) {
         say(`Original runtime check failed: ${error.message}`, 'This is a runtime/backend failure, not proof that a macOS permission is missing.');
       }
@@ -173,11 +173,26 @@ async function macGuidance(app, retry) {
     'to inspect that window with LCU and return a screenshot. Approve the original app request and macOS prompts.');
 }
 
-function printMacStatus(report) {
+function printMacLockedUseStatus(app) {
+  if (!app) return;
+  const installer = join(app, 'Contents', MAC_HELPER,
+    'Contents/SharedSupport/Codex Computer Use Installer.app/Contents/MacOS/Codex Computer Use Installer');
+  if (!existsSync(installer)) return;
+  const res = host.run(installer, ['status'], { timeout: 5_000 });
+  const out = (res.stdout ?? '').trim();
+  if (res.status === 0 && out === 'OK: installed') {
+    say('macOS Locked Use plugin: installed (screen auto-unlock via ChatGPT host spawner is ready).');
+  } else if (out === 'OK: not-installed') {
+    say(`macOS Locked Use plugin: not installed. Run "${installer}" install to enable locked-screen use.`);
+  }
+}
+
+function printMacStatus(report, app) {
   const provider = report.provider ?? {};
   if (provider.ok) say('Original Mac provider loaded; app listing and app-state methods are available.');
   else say(`Original Mac provider check failed. ${failureText(provider)}`);
   say('macOS privacy permissions: not verified by LCU.');
+  printMacLockedUseStatus(app);
   return Boolean(provider.ok);
 }
 
@@ -356,7 +371,7 @@ export async function main(root, argv, { resolved, env } = {}) {
     return ok ? 0 : 2;
   }
   if (target === 'mac') {
-    const ok = printMacStatus(report);
+    const ok = printMacStatus(report, app);
     if (interactive) await macGuidance(app, check);
     else {
       macInstructions(app);

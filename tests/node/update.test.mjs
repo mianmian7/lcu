@@ -8,7 +8,7 @@ import * as visibility from '../../lcu/claude_visibility.mjs';
 import { hardenLifecycleDirectory } from '../../lcu/claude_lifecycle.mjs';
 import { override, temporary, write, mockWrite } from './fixtures.mjs';
 
-const INFO = { version: '0.9.2', tag: 'v0.9.2', severity: 'normal', release_url: 'https://github.com/amontlabs/lcu/releases/tag/v0.9.2' };
+const INFO = { version: '0.9.2', tag: 'v0.9.2', severity: 'normal', release_url: `https://github.com/${update.REPO}/releases/tag/v0.9.2` };
 
 /** An installed 0.9.1 release, a private home and cache, and no real refresh. */
 function setup(t, version = '0.9.1') {
